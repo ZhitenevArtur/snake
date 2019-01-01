@@ -1,9 +1,9 @@
 dirX=dirY = 0;
 greedSize = 15; //greed size
-tilesX = Math.floor(window.innerWidth/greedSize);
+tilesX = Math.floor((window.innerWidth-200)/greedSize);
 tilesY = Math.floor(window.innerHeight/greedSize);
-headX=tilesX/2; //start tile X
-headY=tilesY/2; //start tile Y
+headX=Math.floor(tilesX/2); //start tile X
+headY=Math.floor(tilesY/2); //start tile Y
 // appleX=appleY = 27; //apple position
 appleX=Math.floor(Math.random()*tilesX); //apple position X
 appleY=Math.floor(Math.random()*tilesY); //apple position Y
@@ -16,19 +16,36 @@ level = 1;
 window.onload=function() {
 	canv=document.getElementById("canvas");
 	ctx=canv.getContext("2d");
-	canvas.width = window.innerWidth;
+	canvas.width = window.innerWidth-200;
 	canvas.height = window.innerHeight;
+	// canvas.width = document.body.clientWidth;
+	// canvas.height = document.body.clientHeight;
 	document.addEventListener("keydown",moveDirection);
+	document.addEventListener("resize", resizeCanvas, false);
+	// document.addEventListener("resize",alert("resize"));
 	setInterval(gameLogic,1000/fps);
+
 }
 
+function resizeCanvas() {
+	canvas.width = window.innerWidth-200;
+	canvas.height = window.innerHeight;
+	tilesX = Math.floor((window.innerWidth-200)/greedSize);
+	tilesY = Math.floor(window.innerHeight/greedSize);
+}
 
 function gameLogic() {
+	document.addEventListener("resize", resizeCanvas, false);
 	makeMove();
 	borderCheck();
 	drawSnake();
 	moveTail();
 	spawnAndCheckApple();
+	document.getElementById('pts_table').innerHTML = ("PTS: " + pts + "<br>" +
+		"headX: " + headX + "<br>" + "headY: " + headY + "<br>" +
+		"appleX: " + appleX + "<br>" + "appleY: " + appleY + "<br>" +
+		"dirX" + dirX +"<br>" +"dirY" +dirY + "<br>" +
+		"canvas.width:" + canvas.width + "<br>" + "canvas.height" + canvas.height);
 }
 
 function moveDirection(evt) {
@@ -126,8 +143,8 @@ function showGrid() {
 }
 
 function setStartPosition() {
-	headX=tilesX/2;
-	headY=tilesY/2;
+headX=Math.floor(tilesX/2); //start tile X
+headY=Math.floor(tilesY/2); //start tile Y
 	pts=0;
 	dirX=dirY = 0;
 }

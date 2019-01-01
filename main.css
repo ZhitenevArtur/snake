@@ -1,9 +1,16 @@
 body{
 	margin: 0;
 	padding: 0;
+	display: flex;
+	
 }
 
 #canvas{
 	/*background-color: #0f0f0f;*/
 	display: block;
+	/*width: 100vw;*/
+	/*height: 100vh;*/
+}
+#pts_table{
+	/*color: white;*/
 }
