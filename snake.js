@@ -7,7 +7,10 @@ headY=Math.floor(tilesY/2); //start tile Y
 // appleX=appleY = 27; //apple position
 appleX=Math.floor(Math.random()*tilesX); //apple position X
 appleY=Math.floor(Math.random()*tilesY); //apple position Y
+
 trail = []; //trail array
+block = [];
+
 tail = 3; //tail length
 pts = 0; //points
 fps = 15; //frames per second
@@ -23,6 +26,7 @@ window.onload=function() {
 	document.addEventListener("keydown",moveDirection);
 	document.addEventListener("resize", resizeCanvas, false);
 	// document.addEventListener("resize",alert("resize"));
+	blockGenerator();
 	setInterval(gameLogic,1000/fps);
 
 }
@@ -41,11 +45,12 @@ function gameLogic() {
 	drawSnake();
 	moveTail();
 	spawnAndCheckApple();
+	showBlock();
 	document.getElementById('pts_table').innerHTML = ("PTS: " + pts + "<br>" +
 		"headX: " + headX + "<br>" + "headY: " + headY + "<br>" +
 		"appleX: " + appleX + "<br>" + "appleY: " + appleY + "<br>" +
-		"dirX" + dirX +"<br>" +"dirY" +dirY + "<br>" +
-		"canvas.width:" + canvas.width + "<br>" + "canvas.height" + canvas.height);
+		"dirX: " + dirX +"<br>" +"dirY: " +dirY + "<br>" +
+		"canvas.width: " + canvas.width + "<br>" + "canvas.height: " + canvas.height);
 }
 
 function moveDirection(evt) {
@@ -137,14 +142,50 @@ function showGrid() {
 	for (var y = 0; y < tilesY; y++) {
 		for (var x = 0; x < tilesX; x++) {
 			ctx.strokeStyle="green";
-			ctx.strokeRect(x*greedSize, y*greedSize, greedSize, greedSize);
+			ctx.strokeRect(x*greedSize, y*greedSize, greedSize-2, greedSize-2);
 		}
 	}
 }
 
 function setStartPosition() {
-headX=Math.floor(tilesX/2); //start tile X
-headY=Math.floor(tilesY/2); //start tile Y
+	headX=Math.floor(tilesX/2); //start tile X
+	headY=Math.floor(tilesY/2); //start tile Y
 	pts=0;
 	dirX=dirY = 0;
 }
+
+function blockGenerator() {
+	block.push({x:Math.floor(Math.random()*tilesX),y:Math.floor(Math.random()*tilesY)});
+	for (var i = 0; i < 70; i++) {
+		if(randomInteger(0, 1)==0){
+			if(randomInteger(0, 1)==0){
+				block.push({x:block[i].x, y:block[i].y-1});
+			}
+			else{
+				block.push({x:block[i].x, y:block[i].y+1});
+			}
+		}
+		else{
+			if(randomInteger(0, 1)==0){
+				block.push({x:block[i].x-1, y:block[i].y});
+			}
+			else{
+				block.push({x:block[i].x+1, y:block[i].y});
+			}
+		}
+	}
+
+}
+
+function showBlock(){
+	ctx.fillStyle="grey";
+	for (var i = 0; i < block.length; i++) {
+		ctx.fillRect(block[i].x*greedSize,block[i].y*greedSize,greedSize-2,greedSize-2);
+	}
+}
+
+function randomInteger(min, max) {
+    var rand = min - 0.5 + Math.random() * (max - min + 1)
+    rand = Math.round(rand);
+    return rand;
+  }
