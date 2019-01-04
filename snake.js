@@ -1,4 +1,4 @@
-dirX=dirY = 0;
+dirX=dirY = 0; //direction
 greedSize = 15; //greed size
 tilesX = Math.floor((window.innerWidth-200)/greedSize);
 tilesY = Math.floor(window.innerHeight/greedSize);
@@ -9,7 +9,7 @@ appleX=Math.floor(Math.random()*tilesX); //apple position X
 appleY=Math.floor(Math.random()*tilesY); //apple position Y
 
 trail = []; //trail array
-block = [];
+block = []; //blocks array
 
 tail = 3; //tail length
 pts = 0; //points
@@ -39,18 +39,14 @@ function resizeCanvas() {
 }
 
 function gameLogic() {
-	document.addEventListener("resize", resizeCanvas, false);
+	// document.addEventListener("resize", resizeCanvas, false);
 	makeMove();
 	borderCheck();
 	drawSnake();
 	moveTail();
+	spawnAndCheckBlock();
 	spawnAndCheckApple();
-	showBlock();
-	document.getElementById('pts_table').innerHTML = ("PTS: " + pts + "<br>" +
-		"headX: " + headX + "<br>" + "headY: " + headY + "<br>" +
-		"appleX: " + appleX + "<br>" + "appleY: " + appleY + "<br>" +
-		"dirX: " + dirX +"<br>" +"dirY: " +dirY + "<br>" +
-		"canvas.width: " + canvas.width + "<br>" + "canvas.height: " + canvas.height);
+	showInfo();
 }
 
 function moveDirection(evt) {
@@ -152,40 +148,60 @@ function setStartPosition() {
 	headY=Math.floor(tilesY/2); //start tile Y
 	pts=0;
 	dirX=dirY = 0;
+	// delete block;
+	// blockGenerator();
 }
 
 function blockGenerator() {
-	block.push({x:Math.floor(Math.random()*tilesX),y:Math.floor(Math.random()*tilesY)});
-	for (var i = 0; i < 70; i++) {
-		if(randomInteger(0, 1)==0){
+	for (var k = 0; k < 50; k++) {
+		block.push({x:Math.floor(Math.random()*tilesX),y:Math.floor(Math.random()*tilesY)});
+		for (var i = 0; i < 25; i++) {
 			if(randomInteger(0, 1)==0){
-				block.push({x:block[i].x, y:block[i].y-1});
+				if(randomInteger(0, 1)==0){
+					block.push({x:block[block.length-1].x, y:block[block.length-1].y-1});
+				}
+				else{
+					block.push({x:block[block.length-1].x, y:block[block.length-1].y+1});
+				}
 			}
 			else{
-				block.push({x:block[i].x, y:block[i].y+1});
-			}
-		}
-		else{
-			if(randomInteger(0, 1)==0){
-				block.push({x:block[i].x-1, y:block[i].y});
-			}
-			else{
-				block.push({x:block[i].x+1, y:block[i].y});
+				if(randomInteger(0, 1)==0){
+					block.push({x:block[block.length-1].x-1, y:block[block.length-1].y});
+				}
+				else{
+					block.push({x:block[block.length-1].x+1, y:block[block.length-1].y});
+				}
 			}
 		}
 	}
-
 }
 
-function showBlock(){
+function spawnAndCheckBlock(){
+	if(headX==appleX && headY==appleY) {
+		tail = 3;
+		setStartPosition();
+	}
+
 	ctx.fillStyle="grey";
 	for (var i = 0; i < block.length; i++) {
 		ctx.fillRect(block[i].x*greedSize,block[i].y*greedSize,greedSize-2,greedSize-2);
+		if(headX==block[i].x && headY==block[i].y) {
+			tail = 3;
+			setStartPosition();
+		}
 	}
 }
 
 function randomInteger(min, max) {
-    var rand = min - 0.5 + Math.random() * (max - min + 1)
-    rand = Math.round(rand);
-    return rand;
-  }
+	var rand = min - 0.5 + Math.random() * (max - min + 1)
+	rand = Math.round(rand);
+	return rand;
+}
+
+function showInfo() {
+	document.getElementById('pts_table').innerHTML = ("PTS: " + pts + "<br>" +
+		"headX: " + headX + "<br>" + "headY: " + headY + "<br>" +
+		"appleX: " + appleX + "<br>" + "appleY: " + appleY + "<br>" +
+		"dirX: " + dirX +"<br>" +"dirY: " +dirY + "<br>" +
+		"canvas.width: " + canvas.width + "<br>" + "canvas.height: " + canvas.height);
+}
