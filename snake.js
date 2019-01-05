@@ -15,6 +15,8 @@ tail = 3; //tail length
 pts = 0; //points
 fps = 15; //frames per second
 level = 1;
+info = 0;
+grid = 0;
 
 window.onload=function() {
 	canv=document.getElementById("canvas");
@@ -46,7 +48,9 @@ function gameLogic() {
 	moveTail();
 	spawnAndCheckBlock();
 	spawnAndCheckApple();
-	showInfo();
+	if(info==1){
+		showInfo();
+	}
 }
 
 function moveDirection(evt) {
@@ -108,7 +112,9 @@ function drawSnake() {
 	ctx.fillStyle="black";
 	ctx.fillRect(0,0,canv.width,canv.height);
 	
-	// showGrid();
+	if(grid==1){
+		showGrid();
+	}
 	
 	ctx.fillStyle="white";
 	for(var i=0;i<trail.length;i++) {
@@ -143,11 +149,15 @@ function showGrid() {
 	}
 }
 
-function setStartPosition() {
+function setStartPosition(reBlock) {
 	headX=Math.floor(tilesX/2); //start tile X
 	headY=Math.floor(tilesY/2); //start tile Y
 	pts=0;
 	dirX=dirY = 0;
+	if(reBlock==1){
+		block = [];
+		blockGenerator();
+	}
 	// delete block;
 	// blockGenerator();
 }
@@ -177,17 +187,13 @@ function blockGenerator() {
 }
 
 function spawnAndCheckBlock(){
-	if(headX==appleX && headY==appleY) {
-		tail = 3;
-		setStartPosition();
-	}
 
 	ctx.fillStyle="grey";
 	for (var i = 0; i < block.length; i++) {
 		ctx.fillRect(block[i].x*greedSize,block[i].y*greedSize,greedSize-2,greedSize-2);
 		if(headX==block[i].x && headY==block[i].y) {
 			tail = 3;
-			setStartPosition();
+			setStartPosition(1);
 		}
 	}
 }
