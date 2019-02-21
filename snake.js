@@ -1,7 +1,7 @@
 dirX=dirY = 0; //direction
 greedSize = 15; //greed size
-tilesX = Math.floor((window.innerWidth-200)/greedSize);
-tilesY = Math.floor(window.innerHeight/greedSize);
+tilesX = Math.floor(500/greedSize);
+tilesY = Math.floor(800/greedSize);
 headX=Math.floor(tilesX/2); //start tile X
 headY=Math.floor(tilesY/2); //start tile Y
 // appleX=appleY = 27; //apple position
@@ -21,8 +21,8 @@ grid = 0;
 window.onload=function() {
 	canv=document.getElementById("canvas");
 	ctx=canv.getContext("2d");
-	canvas.width = window.innerWidth-200;
-	canvas.height = window.innerHeight;
+	canvas.width = 500;
+	canvas.height = 800;
 	// canvas.width = document.body.clientWidth;
 	// canvas.height = document.body.clientHeight;
 	document.addEventListener("keydown",moveDirection);
@@ -163,9 +163,9 @@ function setStartPosition(reBlock) {
 }
 
 function blockGenerator() {
-	for (var k = 0; k < 50; k++) {
+	for (var k = 0; k < 15; k++) {
 		block.push({x:Math.floor(Math.random()*tilesX),y:Math.floor(Math.random()*tilesY)});
-		for (var i = 0; i < 25; i++) {
+		for (var i = 0; i < 5; i++) {
 			if(randomInteger(0, 1)==0){
 				if(randomInteger(0, 1)==0){
 					block.push({x:block[block.length-1].x, y:block[block.length-1].y-1});
